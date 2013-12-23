@@ -8,3 +8,27 @@ dopi.forwards();
 time.sleep(1);
 
 dopi.stop();
+
+time.sleep(1);
+
+dopi.clockwise();
+
+time.sleep(1);
+
+dopi.stop();
+
+time.sleep(1);
+
+dopi.anticlockwise();
+
+time.sleep(1);
+
+dopi.stop();
+
+time.sleep(1);
+
+dopi.reverse();
+
+time.sleep(1);
+
+dopi.stop();

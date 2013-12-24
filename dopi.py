@@ -1,59 +1,40 @@
-import initio, time
+import initio, time, signal
 
 config = initio.InitioConfiguration();
+config.head = None;
 dopi = initio.Initio(config);
 
-def irCallback(l, r):
-	print "IR change: (%s, %s)" % (str(l), str(r));
+class Antibump:
+	"""Don't crash into things (too much)"""
 
-dopi.ir.addCallback(irCallback);
+	def __init__(self, initio):
+		self.initio = initio;
+		self.cont = True;
+		signal.signal(signal.SIGINT, self._end);
+		self.left = None;
+		self.right = None;
+		self.initio.ir.addCallback(self._handleSignal);
 
-def floorCallback(l, r):
-	print "Floor change: (%s, %s)" % (str(l), str(r));
+	def _end(self, signal, frame):
+		self.cont = False;
 
-dopi.floor.addCallback(floorCallback);
+	def _handleSignal(self, left, right):
+		self.left = left;
+		self.right = right;
 
-dopi.drive.forwards();
+	def run(self):
+		while self.cont:
+			if self.left == 0 and self.right == 0:
+				self.initio.drive.reverse();
+			elif self.left == 1 and self.right == 0:
+				self.initio.drive.anticlockwise();
+			elif self.left == 0 and self.right == 1:
+				self.initio.drive.clockwise();
+			else:
+				self.initio.drive.forwards();
+			time.sleep(0.5);
 
-dopi.head.pan(-100);
-
-time.sleep(1);
-
-dopi.drive.stop();
-
-time.sleep(1);
-
-dopi.drive.clockwise();
-
-dopi.head.pan(100);
-
-time.sleep(1);
-
-dopi.drive.stop();
-dopi.head.pan(0);
-
-time.sleep(1);
-
-dopi.drive.anticlockwise();
-dopi.head.tilt(-100);
-
-time.sleep(1);
+ab = Antibump(dopi);
+ab.run();
 
 dopi.drive.stop();
-
-time.sleep(1);
-
-dopi.drive.reverse();
-dopi.head.tilt(100);
-
-time.sleep(1);
-
-dopi.head.tilt(0);
-dopi.drive.stop();
-
-time.sleep(3);
-
-print "Ultrasonic"
-print dopi.ultrasonic.query();
-
-time.sleep(3);

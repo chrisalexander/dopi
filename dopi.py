@@ -3,32 +3,32 @@ import initio, time
 config = initio.InitioConfiguration();
 dopi = initio.Initio(config);
 
-dopi.forwards();
+dopi.drive.forwards();
 
 time.sleep(1);
 
-dopi.stop();
+dopi.drive.stop();
 
 time.sleep(1);
 
-dopi.clockwise();
+dopi.drive.clockwise();
 
 time.sleep(1);
 
-dopi.stop();
+dopi.drive.stop();
 
 time.sleep(1);
 
-dopi.anticlockwise();
+dopi.drive.anticlockwise();
 
 time.sleep(1);
 
-dopi.stop();
+dopi.drive.stop();
 
 time.sleep(1);
 
-dopi.reverse();
+dopi.drive.reverse();
 
 time.sleep(1);
 
-dopi.stop();
+dopi.drive.stop();

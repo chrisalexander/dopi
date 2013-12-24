@@ -41,4 +41,8 @@ time.sleep(1);
 dopi.head.tilt(0);
 dopi.drive.stop();
 
-time.sleep(1);
+time.sleep(3);
+
+print dopi.ultrasonic.query();
+
+time.sleep(3);
